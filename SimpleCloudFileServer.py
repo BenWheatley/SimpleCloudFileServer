@@ -19,11 +19,19 @@ class SimpleCloudFileServer(BaseHTTPServer.BaseHTTPRequestHandler):
 		self.sendHeader()
 	
 	def do_GET(self):
-		self.sendHeader()
-		# While this claims the content being returned is image/jpeg, the upload handler doesn't actually enforce that
-		self.sendHeader(response=200, contentType="image/jpeg")
 		filename = self.path[1:]
-		self.wfile.write(self.fileData[filename])
+		
+		if (filename=="index.json"):
+			self.sendHeader()
+			self.wfile.write(json.dumps(self.fileData.keys()))
+			
+		elif filename not in self.fileData:
+			self.sendHeader(response=404)
+			
+		else:
+			# While this claims the content being returned is image/jpeg, the upload handler doesn't actually enforce that
+			self.sendHeader(response=200, contentType="image/jpeg")
+			self.wfile.write(self.fileData[filename])
 	
 	def do_POST(self):
 		self.sendHeader()
