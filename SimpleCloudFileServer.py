@@ -13,6 +13,9 @@ class SimpleCloudFileServer(BaseHTTPServer.BaseHTTPRequestHandler):
 		self.send_header("Content-type", contentType)
 		self.end_headers()
 	
+	def do_HEAD(self):
+		self.sendHeader()
+	
 	def do_GET(self):
 		self.sendHeader()
 		self.wfile.write("hi")
